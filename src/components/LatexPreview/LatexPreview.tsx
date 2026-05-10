@@ -13,34 +13,62 @@ export const LatexPreview: React.FC<LatexPreviewProps> = ({ latexContent }) => {
       return null;
     }
 
-    // Split by $$ to find display math blocks
-    const parts = latexContent.split(/(\$\$[^$]*\$\$)/);
+    // Match:
+    // $$...$$ -> block math
+    // $...$   -> inline math
+    const regex = /(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$)/g;
+
+    const parts = latexContent.split(regex);
 
     return parts.map((part, index) => {
-      if (part.match(/^\$\$.*\$\$/)) {
-        // This is a math block
-        const mathContent = part.slice(2, -2); // Remove $$ from both ends
+      // Block math
+      if (part.startsWith('$$') && part.endsWith('$$')) {
+        const mathContent = part.slice(2, -2);
+
         try {
           return (
             <div key={index} className="math-block">
-              <BlockMath>{mathContent}</BlockMath>
+              <BlockMath math={mathContent} />
             </div>
           );
         } catch (error) {
           return (
             <div key={index} className="math-error">
-              <p>Invalid LaTeX: {part}</p>
+              <p>Invalid LaTeX Block: {part}</p>
             </div>
           );
         }
-      } else if (part.trim()) {
-        // Regular text
+      }
+
+      // Inline math
+      if (part.startsWith('$') && part.endsWith('$')) {
+        const mathContent = part.slice(1, -1);
+
+        try {
+          return (
+            <InlineMath
+              key={index}
+              math={mathContent}
+            />
+          );
+        } catch (error) {
+          return (
+            <span key={index} className="math-error">
+              Invalid Inline LaTeX: {part}
+            </span>
+          );
+        }
+      }
+
+      // Regular text
+      if (part.trim()) {
         return (
-          <p key={index} className="preview-text">
+          <span key={index} className="preview-text">
             {part}
-          </p>
+          </span>
         );
       }
+
       return null;
     });
   }, [latexContent]);
@@ -55,7 +83,9 @@ export const LatexPreview: React.FC<LatexPreviewProps> = ({ latexContent }) => {
         {renderedContent ? (
           renderedContent
         ) : (
-          <p className="placeholder-text">Enter LaTeX content to see preview here...</p>
+          <p className="placeholder-text">
+            Enter LaTeX content to see preview here...
+          </p>
         )}
       </div>
     </div>

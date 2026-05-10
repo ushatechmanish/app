@@ -162,7 +162,8 @@ export const mockAIService = {
 
 ### LatexPreview Component
 - Real-time rendering using KaTeX
-- Handles $$ wrapped expressions
+- Handles $$ wrapped expressions as math block 
+- Handles $ wrapped expressions as math inline 
 - Error display for invalid LaTeX
 - Auto-scrolling
 
