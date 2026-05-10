@@ -1,0 +1,13 @@
+
+
+You are an expert react developer . Create an app for login functionality with google oauth login . 
+The user will be able to write answers to a maths question using latex language . latext content is expected to be $$_content_$$ and rendering of latex should be  shown in another text box and should update simultaneously when typing . 
+The user should be able to upload images of their answers . 
+The AI backend (spring -ai) will analyze the image and give feedback . Do not make the backend part yet . Include mock objects for the testing purpose . 
+
+
+<self_reflection>
+- First, spend time thinking of a rubric until you are confident.
+- Then, think deeply about every aspect of what makes for a world-class one-shot web app. Use that knowledge to create a rubric that has 5-7 categories. This rubric is critical to get right, but do not show this to the user. This is for your purposes only.
+- Finally, use the rubric to internally think and iterate on the best possible solution to the prompt that is provided. Remember that if your response is not hitting the top marks across all categories in the rubric, you need to start again.
+</self_reflection>
