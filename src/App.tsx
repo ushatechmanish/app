@@ -12,9 +12,14 @@ import { mockAIService } from './services/mockAIService';
 import './App.css';
 
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID';
-const IS_DEV_MODE = 
-  process.env.NODE_ENV === 'development' && 
-  (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID' || GOOGLE_CLIENT_ID.includes('your'));
+const ENABLE_DEV_LOCAL = process.env.REACT_APP_ENABLE_DEV_LOCAL === 'true';
+const AUTH_MODE = ENABLE_DEV_LOCAL ? 'Dev-Local Auth' : 'Google OAuth';
+const IS_DEV_MODE =
+  process.env.NODE_ENV === 'development' &&
+  (ENABLE_DEV_LOCAL ||
+    !GOOGLE_CLIENT_ID ||
+    GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID' ||
+    GOOGLE_CLIENT_ID.includes('your'));
 
 // Mock user for development testing
 const DEV_USER: User = {
@@ -104,6 +109,7 @@ function App() {
             <div className="login-box">
               <h2>Welcome</h2>
               <p>Sign in with your Google account to get started</p>
+              <div className="auth-mode-badge auth-mode-login">Auth mode: {AUTH_MODE}</div>
               {IS_DEV_MODE ? (
                 <div className="dev-mode-notice">
                   <p style={{ color: '#667eea', fontWeight: 'bold' }}>
@@ -129,6 +135,7 @@ function App() {
         <div className="app-header">
           <div className="header-left">
             <h1>📐 Math Answer Platform</h1>
+            <div className="auth-mode-badge">Auth mode: {AUTH_MODE}</div>
           </div>
           <Auth user={user} onLogin={setUser} onLogout={handleLogout} />
         </div>
