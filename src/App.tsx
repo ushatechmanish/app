@@ -5,6 +5,7 @@ import { Editor } from './components/Editor/Editor';
 import { LatexPreview } from './components/LatexPreview/LatexPreview';
 import { ImageUpload } from './components/ImageUpload/ImageUpload';
 import { Feedback } from './components/Feedback/Feedback';
+import QuestionImage from './components/QuestionImage/QuestionImage';
 import { User, FeedbackResponse } from './types/index';
 import { authService } from './services/authService';
 import { mockAIService } from './services/mockAIService';
@@ -25,7 +26,8 @@ const DEV_USER: User = {
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
-  const [latexContent, setLatexContent] = useState('');
+  const [questionLatexContent, setQuestionLatexContent] = useState('');
+  const [answerLatexContent, setAnswerLatexContent] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<FeedbackResponse | null>(null);
   const [isLoadingFeedback, setIsLoadingFeedback] = useState(false);
@@ -63,13 +65,14 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
-    setLatexContent('');
+    setQuestionLatexContent('');
+    setAnswerLatexContent('');
     setUploadedImage(null);
     setFeedback(null);
   };
 
   const handleRequestFeedback = async () => {
-    if (!latexContent && !uploadedImage) {
+    if (!answerLatexContent && !uploadedImage) {
       setFeedbackError('Please enter LaTeX content or upload an image');
       return;
     }
@@ -78,7 +81,7 @@ function App() {
     setFeedbackError(null);
 
     try {
-      const response = await mockAIService.analyzeImage(uploadedImage || '', latexContent);
+      const response = await mockAIService.analyzeImage(uploadedImage || '', answerLatexContent);
       setFeedback(response);
     } catch (error) {
       setFeedbackError('Failed to get feedback. Please try again.');
@@ -131,14 +134,20 @@ function App() {
         </div>
 
         <main className="app-main">
+                
           <div className="content-grid">
+            <div className="question-section">
+              <QuestionImage image={uploadedImage} />
+              <Editor latexContent={questionLatexContent} onChange={setQuestionLatexContent} />
+              <LatexPreview latexContent={questionLatexContent} />
+            </div>
             <div className="editor-section">
-              <Editor latexContent={latexContent} onChange={setLatexContent} />
+              <Editor latexContent={answerLatexContent} onChange={setAnswerLatexContent} />
               <ImageUpload onImageUpload={setUploadedImage} currentImage={uploadedImage} />
             </div>
 
             <div className="preview-section">
-              <LatexPreview latexContent={latexContent} />
+              <LatexPreview latexContent={answerLatexContent} />
             </div>
 
             <div className="feedback-section">

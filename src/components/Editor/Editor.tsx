@@ -52,7 +52,10 @@ export const Editor: React.FC<EditorProps> = ({ latexContent, onChange }) => {
       <div className="editor-help">
         <h4>LaTeX Format</h4>
         <ul>
-          <li>Wrap equations in $$...$$</li>
+          <li>Wrap equations in $...$ for inline formula</li>
+          <li>Wrap equations in $$...$$ for block formula </li>
+          <li>Some example are $x^2$ or $x_2$ or $$x^2$$ or $$x_2$</li>
+          <li> for reference <a href='https://www.cmor-faculty.rice.edu/~heinken/latex/symbols.pdf'>reference</a></li>
           <li>Use standard LaTeX syntax</li>
           <li>Example: $$\alpha + \beta = \gamma$$</li>
         </ul>
